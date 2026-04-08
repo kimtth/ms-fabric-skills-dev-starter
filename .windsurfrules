@@ -1,0 +1,53 @@
+# Microsoft Fabric Development Rules for Windsurf
+
+# Read .agents/instructions.md for full agent guidance.
+# Skills are in .agents/skills/ (local) and skills-for-fabric/ (first-party).
+
+project_context: |
+  This workspace is a scaffolding template for Microsoft Fabric development.
+  Skills: .agents/skills/ (local), skills-for-fabric/ (first-party Microsoft).
+  Architecture: Agents -> Skills -> Common.
+  Primary API reference: https://learn.microsoft.com/en-us/rest/api/fabric/articles/
+
+rules:
+  - name: delta_lake_format
+    description: Always use Delta Lake format for Lakehouse tables
+
+  - name: correct_auth_scope
+    description: Use correct token audience per workload (see .agents/skills/fabric-core/SKILL.md)
+
+  - name: pagination_required
+    description: All list APIs must handle continuationToken pagination
+
+  - name: lro_handling
+    description: Mutating operations may return 202 — implement LRO polling with Retry-After
+
+  - name: no_hardcoded_secrets
+    description: Never hardcode credentials — use Key Vault or environment variables
+    forbidden_patterns:
+      - "password="
+      - "secret="
+      - "connectionstring="
+
+  - name: mssparkutils_usage
+    description: Use mssparkutils for Fabric-specific operations in notebooks
+    applies_to: ["*.py", "*.ipynb"]
+
+  - name: parameterize_ids
+    description: Never hardcode workspace or item IDs — use variables or config
+
+best_practices:
+  - Use parameterized notebooks and pipelines
+  - Implement incremental processing over full refreshes
+  - Handle LRO and throttling in all generated API code
+  - Use az rest with --resource for Fabric API calls
+  - Log x-ms-request-id from responses for troubleshooting
+
+documentation_links:
+  fabric_rest_api: https://learn.microsoft.com/en-us/rest/api/fabric/articles/
+  lakehouse: https://learn.microsoft.com/en-us/fabric/data-engineering/lakehouse-overview
+  warehouse: https://learn.microsoft.com/en-us/fabric/data-warehouse/data-warehousing
+  notebooks: https://learn.microsoft.com/en-us/fabric/data-engineering/how-to-use-notebook
+  pipelines: https://learn.microsoft.com/en-us/fabric/data-factory/data-factory-overview
+  kql: https://learn.microsoft.com/en-us/fabric/real-time-intelligence/create-database
+  semantic_models: https://learn.microsoft.com/en-us/power-bi/connect-data/service-datasets-understand

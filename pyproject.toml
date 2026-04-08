@@ -1,0 +1,34 @@
+[project]
+name = "ms-fabric-dev-starter"
+version = "0.1.0"
+description = "Scaffolding template for Microsoft Fabric development with AI coding agents"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
+
+[dependency-groups]
+dev = [
+	"ruff",
+	"pytest",
+	"pytest-cov",
+]
+fabric = [
+	"azure-identity",
+	"httpx",
+	"tenacity",
+]
+spark = [
+    "pyspark",
+    "delta-spark",
+]
+sql = [
+	"pyodbc",
+	"sqlalchemy",
+	"pandas",
+]
+# uv sync --group tools
+# uv run --group tools fab auth login
+tools = [
+	"ms-fabric-cli",
+	"fabric-cicd",
+]
