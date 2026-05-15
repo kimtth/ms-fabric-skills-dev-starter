@@ -21,7 +21,7 @@ az account get-access-token --resource https://api.fabric.microsoft.com
 - Use Delta Lake format for all Lakehouse tables
 - Parameterize workspace ID, item ID, token audience — never hardcode
 - Handle pagination (`continuationToken`), LRO (`Retry-After`), throttling (`429`)
-- Use `mssparkutils` for Fabric-specific notebook operations
+- Use `notebookutils` for Fabric-specific notebook operations; preserve `mssparkutils` only for existing backward-compatible code
 - Never hardcode secrets — use Key Vault or environment variables
 - For SDK verification, use the `microsoft-code-reference` skill
 

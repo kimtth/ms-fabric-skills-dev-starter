@@ -19,10 +19,10 @@
 
 ### Finding Things in Fabric
 
-- If workspace AND item are specified:
-  1. Resolve workspace ID by name if needed (see Resolve Workspace Properties by Name)
-  2. Resolve item properties within the workspace (see Resolve Item Properties by Name)
-- If workspace is *not specified*: use Catalog Search APIs
+1. If workspace AND item are specified:
+   1. Resolve workspace ID by name if needed (see Resolve Workspace Properties by Name)
+   2. Resolve item properties within the workspace (see Resolve Item Properties by Name)
+2. If workspace is *not specified*: use the Catalog Search API (see Catalog Search)
 
 *Use APIs exactly as specified — they have implementation limitations.*
 
@@ -119,6 +119,21 @@ All requests require `Authorization: Bearer <token>` and `Content-Type: applicat
 
 Useful response headers: `x-ms-request-id` (troubleshooting), `x-ms-operation-id` (LRO tracking), `Location` (LRO poll URL), `Retry-After` (wait time on 202/429).
 
+### Catalog Search
+
+```
+POST /v1/catalog/search
+{ "search": "<text>", "filter": "Type eq '<itemType>'", "pageSize": 10, "continuationToken": "..." }
+```
+
+**Required delegated scope:** `Catalog.Read.All`
+
+Response: `{ "value": [{ "id", "type", "catalogEntryType", "displayName", "description", "hierarchy": { "workspace": { "id", "displayName" } } }], "continuationToken" }`
+
+* Filter supports `eq`, `ne`, `or`, and parentheses.
+* `search` can be empty, allowing filtering by type only.
+* Indexing delay: Newly created items can take up to 24 hours to appear in search results.
+
 ### List Workspaces
 
 ```
@@ -143,7 +158,7 @@ GET /v1/workspaces/<workspaceId>/items[?type=Lakehouse|Warehouse|...][&continuat
 
 Response: `{ "value": [{ "id", "displayName", "type", "workspaceId" }], "continuationToken" }`
 
-### List Items by Specific Type
+### List Items in a workspace by Specific Type
 
 Type-specific endpoints return additional `properties` (connection strings, etc.):
 
@@ -166,8 +181,13 @@ Or type-specific: `GET /v1/workspaces/<workspaceId>/warehouses/<warehouseId>`
 
 ### Resolve Item Properties by Name
 
+When workspace is known:
 1. Call `GET /v1/workspaces/<workspaceId>/items?type=<ItemType>`
 2. Iterate with pagination until `displayName` matches.
+
+When workspace is not known (cross-workspace discovery):
+1. Call `POST /v1/catalog/search` with the item name and optional type filter.
+2. If ambiguous, present results and ask the user to disambiguate.
 
 ### Get Item Connections
 

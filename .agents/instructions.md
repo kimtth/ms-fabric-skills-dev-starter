@@ -17,7 +17,8 @@ Content flows one way: **Agents → Skills → Common**
 ├── agents/                        # Cross-workload orchestration
 │   ├── FabricDataEngineer.agent.md  # Medallion, ETL/ELT, migration, data quality
 │   ├── FabricAdmin.agent.md         # Capacity, governance, security, cost
-│   └── FabricAppDev.agent.md        # Application development with Fabric
+│   ├── FabricAppDev.agent.md        # Application development with Fabric
+│   └── FabricMigrationEngineer.agent.md # Synapse, Databricks, HDInsight migrations
 ├── skills/                        # Endpoint-specific skills
 │   ├── fabric-core/               # Platform: topology, auth, REST API, pagination, LRO
 │   ├── fabric-lakehouse/          # Lakehouse: schemas, shortcuts, security, PySpark
@@ -25,12 +26,25 @@ Content flows one way: **Agents → Skills → Common**
 │   ├── microsoft-code-reference/  # SDK/API verification against official docs
 │   ├── spark-authoring-cli/       # Spark / Data Engineering workflows
 │   ├── spark-consumption-cli/     # Interactive Lakehouse table analysis
+│   ├── spark-operations-cli/      # Spark diagnostics and monitoring
 │   ├── sqldw-authoring-cli/       # Warehouse, SQL Endpoint authoring
 │   ├── sqldw-consumption-cli/     # Read-only SQL queries
+│   ├── sqldw-operations-cli/      # Warehouse performance diagnostics
 │   ├── eventhouse-authoring-cli/  # KQL table management, ingestion, policies
 │   ├── eventhouse-consumption-cli/ # Read-only KQL queries
+│   ├── eventstream-authoring-cli/ # Eventstream topology authoring
+│   ├── eventstream-consumption-cli/ # Eventstream inspection and monitoring
+│   ├── dataflows-authoring-cli/   # Dataflows Gen2 authoring
+│   ├── dataflows-consumption-cli/ # Dataflows Gen2 inspection
+│   ├── dataflows-save-as-authoring-cli/ # Gen1 to Gen2 save-as upgrade
+│   ├── activator-authoring-cli/   # Activator/Reflex alert authoring
+│   ├── activator-consumption-cli/ # Activator/Reflex inspection
 │   ├── powerbi-authoring-cli/     # Semantic model creation, TMDL, refresh
 │   ├── powerbi-consumption-cli/   # DAX queries, semantic model metadata
+│   ├── search-consumption-cli/    # Fabric catalog search
+│   ├── databricks-migration/      # Databricks to Fabric migration
+│   ├── synapse-migration/         # Synapse to Fabric migration
+│   ├── hdinsight-migration/       # HDInsight to Fabric migration
 │   ├── e2e-medallion-architecture/ # Bronze/Silver/Gold lakehouse patterns
 │   └── check-updates/             # Version checking utility
 ├── common/                        # Shared reference foundations
@@ -39,10 +53,16 @@ Content flows one way: **Agents → Skills → Common**
 │   ├── ITEM-DEFINITIONS-CORE.md   # Item definition envelope, create/update/export
 │   ├── SPARK-AUTHORING-CORE.md    # Spark/Livy/Delta table patterns
 │   ├── SPARK-CONSUMPTION-CORE.md  # Spark read/query patterns
+│   ├── SPARK-MONITORING-CORE.md   # Spark monitoring and diagnostics
+│   ├── SPARK-NOTEBOOK-AUTHORING-CORE.md # Notebook authoring guidance
 │   ├── SQLDW-AUTHORING-CORE.md    # T-SQL surface area and limitations
 │   ├── SQLDW-CONSUMPTION-CORE.md  # SQL read/query patterns
+│   ├── DATAFLOWS-AUTHORING-CORE.md # Dataflows Gen2 authoring
+│   ├── DATAFLOWS-CONSUMPTION-CORE.md # Dataflows Gen2 consumption
 │   ├── EVENTHOUSE-AUTHORING-CORE.md # KQL ingestion and policy patterns
-│   └── EVENTHOUSE-CONSUMPTION-CORE.md # KQL query patterns
+│   ├── EVENTHOUSE-CONSUMPTION-CORE.md # KQL query patterns
+│   ├── EVENTSTREAM-AUTHORING-CORE.md # Eventstream authoring
+│   └── EVENTSTREAM-CONSUMPTION-CORE.md # Eventstream consumption
 └── prompts/                       # Reusable prompt templates
 ```
 
@@ -73,16 +93,30 @@ Content flows one way: **Agents → Skills → Common**
 | SDK/API verification | `microsoft-code-reference` |
 | Spark notebooks, Data Engineering | `spark-authoring-cli` |
 | Interactive Spark analysis | `spark-consumption-cli` |
+| Spark diagnostics and monitoring | `spark-operations-cli` |
 | Warehouse T-SQL authoring | `sqldw-authoring-cli` |
 | SQL read-only queries | `sqldw-consumption-cli` |
+| Warehouse performance diagnostics | `sqldw-operations-cli` |
 | KQL/Eventhouse management | `eventhouse-authoring-cli` |
 | KQL read-only queries | `eventhouse-consumption-cli` |
+| Eventstream authoring | `eventstream-authoring-cli` |
+| Eventstream inspection | `eventstream-consumption-cli` |
+| Dataflows Gen2 authoring | `dataflows-authoring-cli` |
+| Dataflows Gen2 inspection | `dataflows-consumption-cli` |
+| Dataflows Gen1 to Gen2 save-as | `dataflows-save-as-authoring-cli` |
+| Activator/Reflex authoring | `activator-authoring-cli` |
+| Activator/Reflex inspection | `activator-consumption-cli` |
 | Power BI / semantic model authoring | `powerbi-authoring-cli` |
 | DAX queries, metadata | `powerbi-consumption-cli` |
+| Catalog search and item discovery | `search-consumption-cli` |
+| Databricks migration | `databricks-migration` |
+| Synapse migration | `synapse-migration` |
+| HDInsight migration | `hdinsight-migration` |
 | Bronze/Silver/Gold architecture | `e2e-medallion-architecture` |
 | Cross-workload orchestration | Agent: `FabricDataEngineer` |
 | Governance, capacity, security | Agent: `FabricAdmin` |
 | App development with Fabric | Agent: `FabricAppDev` |
+| Workload migration planning | Agent: `FabricMigrationEngineer` |
 
 ## Authentication Quick Reference
 
@@ -112,7 +146,7 @@ az account get-access-token --resource https://kusto.kusto.windows.net
 - Include `Authorization: Bearer <token>` on all REST calls
 - Implement LRO polling with `Retry-After` for mutating operations
 - Paginate all list API calls using `continuationToken`
-- Use `mssparkutils` for Fabric-specific notebook operations
+- Use `notebookutils` for Fabric-specific notebook operations; preserve `mssparkutils` only for existing backward-compatible code
 - Log `x-ms-request-id` from API responses for troubleshooting
 
 ### Avoid
