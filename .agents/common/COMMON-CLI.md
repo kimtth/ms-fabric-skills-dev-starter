@@ -35,12 +35,16 @@ Most of your work will depend on finding items (artifacts) in Fabric.
 
 Simple algorithm:
 
-- if workspace AND item are specified, then:
-  * if workspace is specified by name, find the workspace id (follow instructions in section Resolve Workspace Properties by Name)
-  * if item is specified by name, use the workspace id and *then* find the item properties within the workspace (follow instructions in section Resolve Item Properties by Name)
-- if a workspace is *not specified*, *then, and only then* consider using Catalog Search APIs
+1. If workspace AND item are specified:
+   1. If workspace is specified by name, find the workspace ID (follow instructions in section Resolve Workspace Properties by Name)
+   2. If item is specified by name, use the workspace ID and *then* find the item properties within the workspace (follow instructions in section Resolve Item Properties by Name)
+2. If workspace is *not specified*: use the **Catalog Search API** (`POST /v1/catalog/search`). You can search by name, description, or workspace name. You can also filter by type (e.g., `"filter": "Type eq 'Lakehouse'"`) with or without a search string. The response includes both the item `id` and `hierarchy.workspace.id` - no second call needed
 
-*Don't try to be creative about the APIs, use them exactly as specified -- they have implementation limitations*
+> **Disambiguation**: If Catalog Search returns multiple matches, present the results to the user (showing display name, type, and workspace name) and ask them to confirm which item they mean.
+
+*Don't try to be creative about the APIs, use them exactly as specified — they have implementation limitations.*
+
+### Resolve Workspace Properties by Name
 
 To find a workspace's details (including its ID) by name use JMESPath filtering (see also COMMON-CORE.md Resolve Workspace Properties by Name):
 
@@ -53,10 +57,13 @@ az rest --method get \
   --output tsv
 ```
 
-> **Caution**: This only searches the first page.  For tenants with many
+> **Caution**: This only searches the first page. For tenants with many
 > workspaces, pagination may be needed (see Pagination Pattern section below).
 
-To find an item's details (including its ID) by name within a workspace, use JMESPath filtering (see also COMMON-CORE.md Resolve Item Properties by Name):
+### Resolve Item Properties by Name
+
+#### When the workspace is known
+Use list-and-filter for an exact match (see also COMMON-CORE.md Resolve Item Properties by Name):
 
 ```bash
 ITEM_NAME="SalesLakehouse"
@@ -68,8 +75,25 @@ az rest --method get \
   --output tsv
 ```
 
-> **Caution**: This only searches the first page.  For tenants with many
-> workspaces, pagination may be needed (see Pagination Pattern section below).
+> **Caution**: This only searches the first page. For tenants with many
+> items, pagination may be needed (see Pagination Pattern section below).
+
+#### When the workspace is *not* known
+Use the Catalog Search API (see also COMMON-CORE.md Catalog Search):
+
+```bash
+cat > /tmp/body.json << 'EOF'
+{"search": "SalesLakehouse", "filter": "Type eq 'Lakehouse'", "pageSize": 30}
+EOF
+az rest --method post \
+  --resource "https://api.fabric.microsoft.com" \
+  --url "https://api.fabric.microsoft.com/v1/catalog/search" \
+  --body @/tmp/body.json
+```
+
+* The response includes `id`, `type`, `displayName`, `description`, and `hierarchy.workspace` (with `id` and `displayName`) for each match.
+* Newly created items can take up to 24 hours to appear in Catalog Search results.
+* See [Catalog Search API reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/catalog/search) for supported filter types.
 
 ---
 
@@ -171,6 +195,7 @@ All operations use the `az rest` template from the Quick Reference section. Key 
 
 | Operation | Method | URL Path | Notes |
 |---|---|---|---|
+| Catalog Search | POST | `/v1/catalog/search` | Body: `search`, `filter`, `pageSize`. Returns items with workspace context. |
 | List Workspaces | GET | `/v1/workspaces` | Add `?roles=Admin` to filter by role |
 | Get Workspace by ID | GET | `/v1/workspaces/$WS_ID` | |
 | List Items | GET | `/v1/workspaces/$WS_ID/items` | Add `?type=Lakehouse` to filter |

@@ -70,18 +70,31 @@ All skills are under `.agents/skills/`. Each has a `SKILL.md` with YAML frontmat
 | `fabric-api-discovery` | Fabric MCP Server tools, API specs, item definitions, developer vs consumer patterns |
 | `microsoft-code-reference` | Verify Microsoft SDK methods, packages, and parameter signatures against official docs |
 
-### Endpoint Skills (from [microsoft/skills-for-fabric](https://github.com/microsoft/skills-for-fabric))
+### Endpoint Skills (from [microsoft/skills-for-fabric](https://github.com/microsoft/skills-for-fabric) v0.3.1)
 
 | Skill | Purpose |
 |-------|---------|
 | `spark-authoring-cli` | Spark and Data Engineering workflows |
 | `spark-consumption-cli` | Interactive Lakehouse table analysis |
+| `spark-operations-cli` | Spark job, session, and performance diagnostics |
 | `sqldw-authoring-cli` | Warehouse, SQL Endpoint authoring |
 | `sqldw-consumption-cli` | Read-only SQL queries |
+| `sqldw-operations-cli` | Warehouse performance diagnostics and query insights |
 | `eventhouse-authoring-cli` | KQL table management, ingestion, policies |
 | `eventhouse-consumption-cli` | Read-only KQL queries |
+| `eventstream-authoring-cli` | Eventstream topology authoring and deployment |
+| `eventstream-consumption-cli` | Eventstream inspection and monitoring |
+| `dataflows-authoring-cli` | Dataflows Gen2 authoring and Power Query M definitions |
+| `dataflows-consumption-cli` | Dataflows Gen2 read-only exploration and monitoring |
+| `dataflows-save-as-authoring-cli` | Dataflows Gen1 to Gen2 save-as upgrade workflows |
+| `activator-authoring-cli` | Activator/Reflex alert and action authoring |
+| `activator-consumption-cli` | Activator/Reflex definition inspection |
 | `powerbi-authoring-cli` | Semantic model creation, TMDL, refresh |
 | `powerbi-consumption-cli` | DAX queries and metadata |
+| `search-consumption-cli` | Fabric catalog search and item discovery |
+| `databricks-migration` | Databricks to Fabric migration planning |
+| `synapse-migration` | Azure Synapse to Fabric migration |
+| `hdinsight-migration` | Azure HDInsight to Fabric migration |
 | `e2e-medallion-architecture` | Bronze/Silver/Gold lakehouse patterns |
 
 ### Agents (`.agents/agents/`)
@@ -91,6 +104,7 @@ All skills are under `.agents/skills/`. Each has a `SKILL.md` with YAML frontmat
 | `FabricDataEngineer` | Cross-workload orchestration: medallion, ETL/ELT, migration, data quality |
 | `FabricAdmin` | Capacity, governance, security, cost |
 | `FabricAppDev` | Application development with Fabric |
+| `FabricMigrationEngineer` | Migration planning for Synapse, Databricks, and HDInsight to Fabric |
 
 ### Shared References (`.agents/common/`)
 
@@ -100,8 +114,17 @@ All skills are under `.agents/skills/`. Each has a `SKILL.md` with YAML frontmat
 | `COMMON-CLI.md` | CLI recipes (`az rest`, pagination handling, job execution) |
 | `ITEM-DEFINITIONS-CORE.md` | Item definition envelope, create/update/export/import |
 | `SPARK-AUTHORING-CORE.md` | Spark/Livy/Delta table patterns |
+| `SPARK-CONSUMPTION-CORE.md` | Spark read/query and Livy consumption patterns |
+| `SPARK-MONITORING-CORE.md` | Spark monitoring API and diagnostics patterns |
+| `SPARK-NOTEBOOK-AUTHORING-CORE.md` | Notebook authoring and lakehouse context guidance |
 | `SQLDW-AUTHORING-CORE.md` | T-SQL surface area and limitations |
+| `SQLDW-CONSUMPTION-CORE.md` | SQL read/query, security, metadata refresh, and performance patterns |
+| `DATAFLOWS-AUTHORING-CORE.md` | Dataflows Gen2 definition and authoring patterns |
+| `DATAFLOWS-CONSUMPTION-CORE.md` | Dataflows Gen2 inspection and monitoring patterns |
 | `EVENTHOUSE-AUTHORING-CORE.md` | KQL ingestion and policy patterns |
+| `EVENTHOUSE-CONSUMPTION-CORE.md` | KQL query, Eventhouse discovery, and analytics patterns |
+| `EVENTSTREAM-AUTHORING-CORE.md` | Eventstream topology authoring patterns |
+| `EVENTSTREAM-CONSUMPTION-CORE.md` | Eventstream inspection and monitoring patterns |
 
 ## Fabric REST API Quick Reference
 
@@ -114,7 +137,7 @@ Base URL: `https://api.fabric.microsoft.com/v1/`
 | Fabric REST API | `https://api.fabric.microsoft.com/.default` |
 | OneLake (DFS/Blob) | `https://storage.azure.com/.default` |
 | Warehouse / SQL Endpoint | `https://database.windows.net/.default` |
-| KQL / Kusto | `https://api.kusto.windows.net/.default` |
+| KQL / Kusto | `https://kusto.kusto.windows.net/.default` |
 | Power BI / XMLA | `https://analysis.windows.net/powerbi/api/.default` |
 
 ### Patterns

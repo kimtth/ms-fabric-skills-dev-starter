@@ -1,11 +1,11 @@
 # Microsoft Fabric Development Rules for Windsurf
 
 # Read .agents/instructions.md for full agent guidance.
-# Skills are in .agents/skills/ (local) and skills-for-fabric/ (first-party).
+# Skills are in .agents/skills/.
 
 project_context: |
   This workspace is a scaffolding template for Microsoft Fabric development.
-  Skills: .agents/skills/ (local), skills-for-fabric/ (first-party Microsoft).
+  Skills: .agents/skills/.
   Architecture: Agents -> Skills -> Common.
   Primary API reference: https://learn.microsoft.com/en-us/rest/api/fabric/articles/
 
@@ -29,8 +29,8 @@ rules:
       - "secret="
       - "connectionstring="
 
-  - name: mssparkutils_usage
-    description: Use mssparkutils for Fabric-specific operations in notebooks
+  - name: notebookutils_usage
+    description: Use notebookutils for Fabric-specific operations in notebooks; preserve mssparkutils only for existing backward-compatible code
     applies_to: ["*.py", "*.ipynb"]
 
   - name: parameterize_ids

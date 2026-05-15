@@ -142,20 +142,22 @@ target.alias("t").merge(
  .execute()
 ```
 
-### mssparkutils
+### Notebook Utilities
+
+Microsoft Fabric renamed MSSparkUtils to NotebookUtils. Existing `mssparkutils` code remains backward-compatible, but new code should prefer `notebookutils` for continued support and access to newer modules.
 
 ```python
 # List files
-mssparkutils.fs.ls("Files/raw/")
+notebookutils.fs.ls("Files/raw/")
 
 # Copy files
-mssparkutils.fs.cp("Files/source/", "Files/dest/", recurse=True)
+notebookutils.fs.cp("Files/source/", "Files/dest/", recurse=True)
 
 # Get secret from Key Vault
-secret = mssparkutils.credentials.getSecret("https://my-kv.vault.azure.net/", "secret-name")
+secret = notebookutils.credentials.getSecret("https://my-kv.vault.azure.net/", "secret-name")
 
 # Run another notebook
-mssparkutils.notebook.run("other_notebook", timeout_seconds=600, arguments={"param1": "value1"})
+notebookutils.notebook.run("other_notebook", timeout_seconds=600, arguments={"param1": "value1"})
 ```
 
 ## Medallion Architecture

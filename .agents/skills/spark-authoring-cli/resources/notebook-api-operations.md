@@ -4,7 +4,7 @@ Principles and decision guidance for reading and updating Fabric notebook conten
 Use this guide when the task requires modifying an **existing** notebook in a Fabric workspace
 (e.g., adding new columns, updating SQL logic, changing cell code).
 
-> **Local file authoring?** See [local-development.md](local-development.md) instead.
+> **Local file authoring?** See [development-workflow.md](development-workflow.md) instead.
 > This guide covers **service-mode** operations that require a workspace ID and a Fabric token.
 
 ---

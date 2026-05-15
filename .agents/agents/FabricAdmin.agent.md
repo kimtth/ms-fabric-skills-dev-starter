@@ -10,10 +10,16 @@ delegates_to:
 - spark-consumption-cli
 - sqldw-authoring-cli
 - sqldw-consumption-cli
+- sqldw-operations-cli
 - eventhouse-authoring-cli
 - eventhouse-consumption-cli
+- eventstream-authoring-cli
+- eventstream-consumption-cli
 - powerbi-authoring-cli
 - powerbi-consumption-cli
+- dataflows-authoring-cli
+- dataflows-consumption-cli
+- dataflows-save-as-authoring-cli
 - e2e-medallion-architecture
 ---
 
@@ -43,6 +49,14 @@ BE CONCISE AND INTERESTING:
 * Focus on relevant executive summaries and interesting facts insted of long chains of details 
 ** Save full documentation in markdown files in the WorkspaceReport folder, and also write a summary of the documentation in the conversation.**
 
+
+## Delegation Rules
+
+Route to specialized skills for endpoint-specific implementation:
+
+- dataflows-authoring-cli for dataflow creation, modification, scheduling, triggering, and connection management
+- dataflows-consumption-cli for dataflow monitoring, refresh status tracking, governance audits, and definition exploration
+- dataflows-save-as-authoring-cli for tenant-wide oversight of save-as Dataflow Gen2 operations (Gen1 → Gen2 CI/CD), readiness scans across workspaces, and risk assessment reporting
 
 ## Relevant Fabric documentation:
 

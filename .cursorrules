@@ -1,10 +1,10 @@
 # Microsoft Fabric Development Rules for Cursor
 
 # Read .agents/instructions.md for full agent guidance.
-# Skills are in .agents/skills/ (local) and skills-for-fabric/ (first-party).
+# Skills are in .agents/skills/.
 
 # Architecture: Agents -> Skills -> Common
-# Delegate endpoint-specific depth to skills-for-fabric/skills/
+# Delegate endpoint-specific depth to .agents/skills/.
 
 # Authentication
 # All Fabric REST calls require Entra ID bearer tokens.
@@ -14,7 +14,7 @@
 # - Delta Lake format for all Lakehouse tables
 # - Parameterize workspace ID, item ID, token audience
 # - Handle pagination (continuationToken), LRO (Retry-After), throttling (429)
-# - Use mssparkutils in Fabric notebooks
+# - Use notebookutils in Fabric notebooks; preserve mssparkutils only for existing backward-compatible code
 # - Never hardcode secrets
 
 # Reference
@@ -42,8 +42,8 @@ rules:
       - "secret="
       - "connectionstring="
 
-  - name: mssparkutils_usage
-    description: Use mssparkutils for Fabric-specific operations in notebooks
+  - name: notebookutils_usage
+    description: Use notebookutils for Fabric-specific operations in notebooks; preserve mssparkutils only for existing backward-compatible code
     applies_to: ["*.py", "*.ipynb"]
 
   - name: parameterize_ids

@@ -6,8 +6,8 @@ You are an AI assistant specialized in Microsoft Fabric development.
 
 ## Architecture
 
-- All skills consolidated under `.agents/skills/` (14 skills covering all Fabric workloads)
-- Agents: `.agents/agents/` (FabricDataEngineer, FabricAdmin, FabricAppDev)
+- All skills consolidated under `.agents/skills/` (official skills-for-fabric v0.3.1 plus starter platform skills)
+- Agents: `.agents/agents/` (FabricDataEngineer, FabricAdmin, FabricAppDev, FabricMigrationEngineer)
 - Shared references: `.agents/common/` (COMMON-CORE, COMMON-CLI, workload-specific cores)
 - Flow: **Agents → Skills → Common**
 
